@@ -19,27 +19,38 @@ class RedisController extends Controller
             env('REDIS_HOST', '127.0.0.1'),
             env('REDIS_PORT', '6379'),
         );
-        $redis->mSet(
-            [
-                'age:1' => 24,
-                'age:2' => 50,
-                'age:3' => 80,
-            ]
-        );
-        for ($i = 1; $i <= 3; ++$i) {
-            $redis->set("name:$i", "Misha$i", 10);
-            $redis->setnx('name:1', 'Mom');
-            $redis->persist('name:2');
-            $redis->expire('name:3', 3600);
-        }
-        $redis->incr('age:1');
-        $redis->decr('age:2');
-        for ($i = 1; $i <= 3; ++$i) {
-            $array["getName$i"] = $redis->get("name:$i");
-            $array["ttlName$i"] = $redis->ttl("name:$i");
-        }
-        $array = array_merge($array, $redis->mGet(["age:1", "age:2", "age:3",]));
-
+//        $redis->mSet(
+//            [
+//                'age:1' => 24,
+//                'age:2' => 50,
+//                'age:3' => 80,
+//            ]
+//        );
+//        for ($i = 1; $i <= 3; ++$i) {
+//            $redis->set("name:$i", "Misha$i", 10);
+//            $redis->setnx('name:1', 'Mom');
+//            $redis->persist('name:2');
+//            $redis->expire('name:3', 3600);
+//        }
+//        $redis->incr('age:1');
+//        $redis->decr('age:2');
+//        for ($i = 1; $i <= 3; ++$i) {
+//            $array["getName$i"] = $redis->get("name:$i");
+//            $array["ttlName$i"] = $redis->ttl("name:$i");
+//        }
+//        $array = array_merge($array, $redis->mGet(["age:1", "age:2", "age:3",]));
+        $redis->lPush('list:1', 4);
+        $redis->lPush('list:1', 3);
+        $redis->lPush('list:1', 2);
+        $redis->lPush('list:1', 1);
+        $redis->lPush('list:2', 4, 2, 3);
+        $redis->lTrim('list:1', 0, 2);
+        $array[] = $redis->rPop('list:1');
+        $array[] = $redis->rPop('list:1');
+        $array[] = $redis->rPop('list:1');
+        $array['list1'] = $redis->lLen('list:1');
+        $array['list2'] = $redis->lLen('list:2');
+        $redis->del('list:2');
 
         $redis->close();
         return view('redis', compact('array'));
