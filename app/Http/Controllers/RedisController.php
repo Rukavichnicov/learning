@@ -83,6 +83,8 @@ class RedisController extends Controller
 //        dd($redis->zRange('sorted:set:1', 0, -1, true));
 //        dd($redis->zRevRank('sorted:set:1', 'Petya'));
 
+//        Удаляет все данные из редиса
+//        $redis->flushAll();
         $redis->close();
         return view('redis', compact('array'));
     }

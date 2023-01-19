@@ -16,7 +16,7 @@ class BlogPostsTableSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i <= 99; ++$i) {
+        for ($i = 0; $i <= 999; ++$i) {
             $title = fake()->sentence(rand(3, 8));
             $txt = fake()->realText(rand(1000, 4000));
             $isPublished = rand(1, 5) > 1;
