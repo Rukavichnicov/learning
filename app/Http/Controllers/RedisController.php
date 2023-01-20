@@ -85,6 +85,10 @@ class RedisController extends Controller
 
 //        Удаляет все данные из редиса
 //        $redis->flushAll();
+        $redis->xAdd('stream', '*', ['temp_f'=>'1', 'data'=>'1', 'time' => now()]);
+        $redis->xRange('stream', 1674233417927, now()->getTimestampMs());
+        $redis->xTrim('stream', 20, false);
+        dd($redis->xRead(['stream' => '1674233417927']));
         $redis->close();
         return view('redis', compact('array'));
     }
