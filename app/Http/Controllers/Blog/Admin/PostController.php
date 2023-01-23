@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
 class PostController extends BaseAdminController
@@ -34,14 +35,10 @@ class PostController extends BaseAdminController
 
     public function index()
     {
-        Cache::tags('default')->put('array_hash', [
-            'key1' => 'value1',
-            'key2' => 'value2',
-        ], now()->addMinutes(1));
-//        dd(Cache::tags('default')->get('array_hash'));
         $paginator = Cache::tags('default')->remember('blog', now()->addMinutes(1), function () {
             return BlogPost::query()->with(['category', 'user'])->get();;
         });
+        \session(['name' => 'Name']);
 
         return view('blog.admin.posts.index', compact('paginator'));
     }

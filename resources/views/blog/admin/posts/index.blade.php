@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container">
+        <h1>{{ session()->get('name') }}</h1>
         <div class="row justify-content-center">
             <div class="col-md-12">
                 @include('blog.admin.posts.includes.result_messages')
